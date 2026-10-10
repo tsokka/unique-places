@@ -1,1 +1,63 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: Onest;
+  src: url("../public/fonts/Onest.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("../public/fonts/PlayfairDisplay.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+:root {
+  --color-brown: #794a0b;
+  --color-brown-hover: #a06312;
+  --color-light-brown: #bb863f;
+  --color-gold: #eacb7e;
+  --color-light-beige: #f4f0e9;
+  --color-dark-gray: #222727;
+  --color-gray: #404141;
+  --color-light-gray-1: #f2f2f2;
+  --color-light-gray-2: #a6a5a6;
+  --color-border: #e0e0e0;
+  --color-header: #fefcfc;
+  --color-header-border: #e5e5e5;
+  --color-page: #fdfdfb;
+  --color-white: #ffffff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Onest, sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--color-dark-gray);
+  background-color: var(--color-page);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
