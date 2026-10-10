@@ -1,0 +1,466 @@
+openapi: 3.0.0
+info:
+  title: unique.places API
+  version: 1.0.0
+  description: |
+    Учебный API для пяти этапов проекта unique.places в модуле Angular 22.
+    Начиная с ДЗ №15 frontend использует этот Backend для авторизации, каталога,
+    избранного, карты, поиска и рекомендаций.
+
+    Для удобной проверки UI-состояний в development можно добавить к GET-запросам
+    `?delay=1500` и/или `?simulateError=true`, если `ALLOW_SIMULATED_ERRORS=true`.
+servers:
+  - url: http://localhost:3000/api
+    description: Local development
+
+tags:
+  - name: System
+  - name: Auth
+  - name: Places
+  - name: Favorites
+
+paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Проверка доступности API
+      responses:
+        '200':
+          description: API работает
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok]
+                properties:
+                  ok: { type: boolean, example: true }
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Создать пользователя
+      description: Дополнительный учебный endpoint для создания пользователя через Postman. Во frontend регистрация не требуется.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterRequest' }
+      responses:
+        '201':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [user]
+                properties: { user: { $ref: '#/components/schemas/User' } }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409':
+          description: Email уже используется
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+              example: { status: 409, message: 'Пользователь с таким email уже существует', code: EMAIL_ALREADY_EXISTS }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Вход пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LoginResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401':
+          description: Неверный email или пароль
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+              example: { status: 401, message: 'Неверный email или пароль', code: INVALID_CREDENTIALS }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Получить новый Access Token
+      description: Refresh Token не ротируется и остаётся действительным до logout или истечения срока. Endpoint возвращает только новый Access Token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        '200':
+          description: Новый Access Token
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [accessToken]
+                properties:
+                  accessToken: { type: string }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Выход пользователя
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken: { type: string, description: Передайте текущий refresh token, чтобы отозвать его на сервере. }
+      responses:
+        '200':
+          description: Сессия завершена
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok]
+                properties: { ok: { type: boolean, example: true } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Текущий пользователь
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Данные пользователя
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [user]
+                properties: { user: { $ref: '#/components/schemas/User' } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /places:
+    get:
+      tags: [Places]
+      summary: Получить каталог мест
+      description: Используется каталогом и картой. Фильтрация выполняется на Backend по техническому значению category.
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Category'
+        - $ref: '#/components/parameters/Delay'
+        - $ref: '#/components/parameters/SimulateError'
+      responses:
+        '200':
+          description: Список мест. Пустой items является штатным empty state.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PlaceListResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /places/{id}:
+    get:
+      tags: [Places]
+      summary: Получить одно место
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/Delay'
+        - $ref: '#/components/parameters/SimulateError'
+      responses:
+        '200':
+          description: Место
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [place]
+                properties: { place: { $ref: '#/components/schemas/Place' } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /places/search:
+    get:
+      tags: [Places]
+      summary: Поиск мест
+      description: Ищет без учёта регистра по названию, городу, стране, тегам и описаниям. Пустой q возвращает пустой список.
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema: { type: string }
+          example: Отель
+        - $ref: '#/components/parameters/Delay'
+        - $ref: '#/components/parameters/SimulateError'
+      responses:
+        '200':
+          description: Результаты поиска
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PlaceListResponse'
+                  - type: object
+                    properties: { query: { type: string } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /places/recommendations:
+    get:
+      tags: [Places]
+      summary: Получить рекомендации
+      description: Возвращает случайную подборку опубликованных мест, исключая избранное текущего пользователя и явно переданные id.
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 12, default: 3 }
+        - name: exclude
+          in: query
+          description: Дополнительные place id через запятую, которые не нужно возвращать.
+          schema: { type: string }
+        - $ref: '#/components/parameters/Delay'
+        - $ref: '#/components/parameters/SimulateError'
+      responses:
+        '200':
+          description: Подборка мест
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PlaceListResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /favorites:
+    get:
+      tags: [Favorites]
+      summary: Избранные места текущего пользователя
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Delay'
+        - $ref: '#/components/parameters/SimulateError'
+      responses:
+        '200':
+          description: Список избранных мест
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PlaceListResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/ServerError' }
+    post:
+      tags: [Favorites]
+      summary: Добавить место в избранное
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [placeId]
+              properties: { placeId: { type: string } }
+      responses:
+        '201':
+          description: Место добавлено. Повторный запрос идемпотентен и не создаёт дубль.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [favorite, place]
+                properties:
+                  favorite: { $ref: '#/components/schemas/Favorite' }
+                  place: { $ref: '#/components/schemas/Place' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /favorites/{placeId}:
+    delete:
+      tags: [Favorites]
+      summary: Удалить место из избранного
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: placeId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Удалено
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok]
+                properties: { ok: { type: boolean, example: true } }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Category:
+      name: category
+      in: query
+      required: false
+      description: Техническое значение категории. `all` или отсутствие параметра возвращает все места.
+      schema:
+        type: string
+        enum: [all, hotel, restaurant, entertainment, nature, culture, architecture, spa]
+        example: hotel
+    Delay:
+      name: delay
+      in: query
+      required: false
+      description: DEV helper — искусственная задержка в миллисекундах (0–10000), если ALLOW_SIMULATED_ERRORS=true.
+      schema: { type: integer, minimum: 0, maximum: 10000 }
+    SimulateError:
+      name: simulateError
+      in: query
+      required: false
+      description: DEV helper — вернуть 500 для проверки error state, если ALLOW_SIMULATED_ERRORS=true.
+      schema: { type: boolean, default: false }
+
+  schemas:
+    User:
+      type: object
+      required: [id, name, email, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        name: { type: string, example: Student }
+        email: { type: string, format: email, example: student@unique.places }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    RegisterRequest:
+      type: object
+      required: [name, email, password]
+      properties:
+        name: { type: string, example: Roman }
+        email: { type: string, format: email, example: roman@example.com }
+        password: { type: string, format: password, minLength: 6, example: secret12 }
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, example: student@unique.places }
+        password: { type: string, format: password, example: student123 }
+
+    LoginResponse:
+      type: object
+      required: [accessToken, refreshToken, user]
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        user: { $ref: '#/components/schemas/User' }
+
+    Place:
+      type: object
+      required: [id, name, category, city, country, tags, shortDescription, description, imageUrl, isPublished, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        name: { type: string, example: Mist Springs }
+        category:
+          type: string
+          enum: [hotel, restaurant, entertainment, nature, culture, architecture, spa]
+          description: Техническое значение для фильтра и собственного Pipe на frontend.
+          example: hotel
+        city: { type: string, example: Имеровигли }
+        country: { type: string, example: Греция }
+        rating: { type: number, format: float, nullable: true, minimum: 0, maximum: 5, example: 5.0 }
+        priceLevel:
+          type: integer
+          nullable: true
+          minimum: 1
+          maximum: 4
+          description: Числовой уровень; frontend может преобразовать его Pipe в €, €€, €€€ и т.д.
+          example: 3
+        tags:
+          type: array
+          items: { type: string }
+          example: [Скала, Панорамный вид, Тихое место]
+        shortDescription: { type: string }
+        description: { type: string, description: Полное описание для модального окна. Может содержать переводы строк. }
+        imageUrl: { type: string, example: /images/places/mist-springs.jpg }
+        badge: { type: string, nullable: true, example: Эксклюзив }
+        latitude: { type: number, format: double, nullable: true, minimum: -90, maximum: 90, example: 36.431 }
+        longitude: { type: number, format: double, nullable: true, minimum: -180, maximum: 180, example: 25.422 }
+        isPublished: { type: boolean, example: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    PlaceListResponse:
+      type: object
+      required: [items, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/Place' }
+        total: { type: integer, minimum: 0 }
+
+    Favorite:
+      type: object
+      required: [id, placeId, createdAt]
+      properties:
+        id: { type: string }
+        placeId: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    Error:
+      type: object
+      required: [status, message, code]
+      properties:
+        status: { type: integer }
+        message: { type: string }
+        code: { type: string }
+        details: { nullable: true }
+
+  responses:
+    ValidationError:
+      description: Ошибка входных данных
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { status: 400, message: 'Некорректные данные', code: VALIDATION_ERROR }
+    Unauthorized:
+      description: Требуется авторизация или токен недействителен
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { status: 401, message: 'Access token недействителен или истёк', code: ACCESS_TOKEN_INVALID }
+    NotFound:
+      description: Сущность не найдена
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { status: 404, message: 'Место не найдено', code: PLACE_NOT_FOUND }
+    ServerError:
+      description: Ошибка сервера / учебная имитация error state
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { status: 500, message: 'Учебная имитация ошибки загрузки', code: SIMULATED_ERROR }

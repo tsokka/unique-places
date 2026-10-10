@@ -1,0 +1,27 @@
+{
+  "name": "unique-places-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Training backend for the unique.places Angular 22 homework project",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "migrate": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down",
+    "migrate:status": "migrate-mongo status"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0"
+  },
+  "devDependencies": {
+    "migrate-mongo": "^12.1.3",
+    "nodemon": "^3.1.10"
+  }
+}

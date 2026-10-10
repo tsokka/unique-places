@@ -1,0 +1,21 @@
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const env = require('./config/env');
+const authRoutes = require('./routes/auth-routes');
+const placeRoutes = require('./routes/place-routes');
+const favoriteRoutes = require('./routes/favorite-routes');
+const { notFound, errorHandler } = require('./middleware/error-handler');
+
+const app = express();
+app.disable('x-powered-by');
+app.use(cors({ origin: env.corsOrigin.split(',').map(x => x.trim()), credentials: false }));
+app.use(express.json({ limit: '1mb' }));
+app.use('/images', express.static(path.join(__dirname, '..', 'public', 'images')));
+app.get('/api/health', (req, res) => res.json({ ok: true }));
+app.use('/api/auth', authRoutes);
+app.use('/api/places', placeRoutes);
+app.use('/api/favorites', favoriteRoutes);
+app.use(notFound);
+app.use(errorHandler);
+module.exports = app;

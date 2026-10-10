@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const { asyncHandler } = require('../utils/async-handler');
+const { auth } = require('../middleware/auth');
+const c = require('../controllers/auth-controller');
+router.post('/register', asyncHandler(c.register));
+router.post('/login', asyncHandler(c.login));
+router.post('/refresh', asyncHandler(c.refresh));
+router.post('/logout', auth, asyncHandler(c.logout));
+router.get('/me', auth, asyncHandler(c.me));
+module.exports = router;

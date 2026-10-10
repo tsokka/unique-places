@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const { asyncHandler } = require('../utils/async-handler');
+const { auth } = require('../middleware/auth');
+const { simulateError } = require('../middleware/simulate-error');
+const c = require('../controllers/favorite-controller');
+router.use(auth, simulateError);
+router.get('/', asyncHandler(c.listFavorites));
+router.post('/', asyncHandler(c.addFavorite));
+router.delete('/:placeId', asyncHandler(c.removeFavorite));
+module.exports = router;
