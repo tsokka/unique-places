@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import {Place} from './places/place';
+import {PLACES} from './places/mock-places';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +8,5 @@ import {Component} from '@angular/core';
   templateUrl: './app.html',
 })
 export class App {
+  places: Place[] = PLACES;
 }
