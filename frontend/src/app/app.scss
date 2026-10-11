@@ -1,0 +1,120 @@
+.header {
+  height: 80px;
+  border-bottom: 1px solid var(--color-header-border);
+  background-color: var(--color-header);
+
+  &__container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  &__logo {
+    display: block;
+  }
+}
+
+.hero {
+  height: 450px;
+  padding-top: 60px;
+  background: linear-gradient(90deg, var(--color-page) 44%, transparent 80%),
+  url("/images/hero.webp") center / cover no-repeat;
+
+  &__title {
+    max-width: 630px;
+    font-family: "Playfair Display", serif;
+    font-size: 45px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-gray);
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 19px;
+
+    &::before {
+      content: "";
+      width: 221px;
+      height: 2px;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--color-gold) 62%, transparent);
+    }
+  }
+
+  &__subtitle {
+    margin-top: 14px;
+    font-size: 25px;
+  }
+
+  &__stamp {
+    width: 168px;
+    height: auto;
+    margin-top: 25px;
+  }
+}
+
+.footer {
+  background-color: var(--color-light-beige);
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+
+  &__about {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 25px;
+    list-style: none;
+  }
+
+  &__link {
+    display: block;
+    border-bottom: 1px solid currentColor;
+    font-size: 16px;
+    color: var(--color-light-brown);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--color-brown);
+    }
+  }
+}
+
+@media (min-width: 1920px) {
+  .hero {
+    height: 600px;
+    padding-top: 135px;
+
+    &__title {
+      max-width: 850px;
+      font-size: 60px;
+    }
+
+    &__divider {
+      margin-top: 30px;
+    }
+
+    &__subtitle {
+      margin-top: 19px;
+    }
+
+    &__stamp {
+      width: 250px;
+      margin-top: 41px;
+    }
+  }
+}
