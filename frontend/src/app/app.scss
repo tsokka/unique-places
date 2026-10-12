@@ -92,6 +92,23 @@
     box-shadow: 0 0 20px rgb(0 0 0 / 20%);
   }
 
+  &_opened,
+  &_opened:hover {
+    box-shadow: 0 0 30px rgb(0 0 0 / 10%);
+  }
+
+  &_opened {
+    height: auto;
+
+    .place-card__description {
+      overflow: visible;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
   &__picture {
     position: relative;
     flex-shrink: 0;

@@ -26,7 +26,7 @@
   <section class="places">
     <div class="container places__list">
       @for (place of places; track place.id) {
-        <article class="place-card">
+        <article class="place-card" [class.place-card_opened]="place.isOpened">
           <div class="place-card__picture">
             <img class="place-card__image" [ngSrc]="place.imageUrl" [alt]="place.name"
                  fill [priority]="$index < 4">
@@ -66,7 +66,13 @@
               <p class="place-card__description">{{ place.description }}</p>
             </div>
 
-            <button class="place-card__button" type="button">Подробнее</button>
+            <button class="place-card__button" type="button" (click)="togglePlace(place)">
+              @if (place.isOpened) {
+                Скрыть
+              } @else {
+                Подробнее
+              }
+            </button>
           </div>
         </article>
       }

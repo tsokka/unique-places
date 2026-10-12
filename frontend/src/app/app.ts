@@ -25,4 +25,8 @@ export class App {
   getPrice(priceLevel: number): string {
     return '€'.repeat(priceLevel);
   }
+
+  togglePlace(place: Place) {
+    place.isOpened = !place.isOpened;
+  }
 }
