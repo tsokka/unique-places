@@ -56,6 +56,152 @@
   }
 }
 
+.places {
+  position: relative;
+  isolation: isolate;
+  padding: 135px 0 100px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: url("/images/pattern.webp") top center / 100% auto repeat-y;
+    opacity: 0.3;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    align-items: start;
+    gap: 25px 24px;
+  }
+}
+
+.place-card {
+  display: flex;
+  flex-direction: column;
+  height: 542px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background-color: var(--color-white);
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 0 20px rgb(0 0 0 / 20%);
+  }
+
+  &__picture {
+    position: relative;
+    flex-shrink: 0;
+    height: 212px;
+  }
+
+  &__image {
+    object-fit: cover;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 16px;
+    min-height: 0;
+    padding: 24px 16px;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-gray);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__category {
+    font-weight: 600;
+    color: var(--color-light-brown);
+  }
+
+  &__location {
+    color: var(--color-light-gray-2);
+  }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__price {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--color-light-brown);
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+  }
+
+  &__tag {
+    padding: 5px 10px;
+    border-radius: 100px;
+    color: var(--color-gray);
+    background-color: var(--color-light-gray-1);
+  }
+
+  &__description {
+    position: relative;
+    flex-grow: 1;
+    min-height: 0;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 20px;
+      background: linear-gradient(transparent, var(--color-fade));
+    }
+  }
+
+  &__button {
+    align-self: flex-start;
+    border-bottom: 1px solid currentColor;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-brown);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--color-brown-hover);
+    }
+  }
+}
+
 .footer {
   background-color: var(--color-light-beige);
 

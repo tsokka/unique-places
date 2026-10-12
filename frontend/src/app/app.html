@@ -22,6 +22,56 @@
       <img class="hero__stamp" src="images/stamp.webp" alt="" width="168" height="78">
     </div>
   </section>
+
+  <section class="places">
+    <div class="container places__list">
+      @for (place of places; track place.id) {
+        <article class="place-card">
+          <div class="place-card__picture">
+            <img class="place-card__image" [ngSrc]="place.imageUrl" [alt]="place.name"
+                 fill [priority]="$index < 4">
+          </div>
+
+          <div class="place-card__body">
+            <h2 class="place-card__title">{{ place.name }}</h2>
+
+            <div class="place-card__info">
+              <div class="place-card__meta">
+                <p class="place-card__category">{{ categoryNames[place.category] }}</p>
+                <p class="place-card__location">{{ place.city }}, {{ place.country }}</p>
+              </div>
+
+              @if (place.rating !== null || place.priceLevel !== null) {
+                <div class="place-card__stats">
+                  @if (place.rating !== null) {
+                    <div class="place-card__rating">
+                      <img src="images/icons/rating-star.svg" alt="" width="15" height="15">
+                      <span>{{ place.rating.toFixed(1) }}</span>
+                    </div>
+                  }
+                  @if (place.priceLevel !== null) {
+                    <span class="place-card__price">{{ getPrice(place.priceLevel) }}</span>
+                  }
+                </div>
+              }
+
+              @if (place.tags.length) {
+                <ul class="place-card__tags">
+                  @for (tag of place.tags; track tag) {
+                    <li class="place-card__tag">{{ tag }}</li>
+                  }
+                </ul>
+              }
+
+              <p class="place-card__description">{{ place.description }}</p>
+            </div>
+
+            <button class="place-card__button" type="button">Подробнее</button>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
 </main>
 
 <footer class="footer">
