@@ -1,0 +1,76 @@
+<article
+  class="place-card"
+  [class.place-card_opened]="place().isOpened"
+>
+  <div class="place-card__picture">
+    <img
+      class="place-card__image"
+      [ngSrc]="place().imageUrl"
+      [alt]="place().name"
+      fill
+      [priority]="priority()"
+    >
+  </div>
+
+  <div class="place-card__body">
+    <h2 class="place-card__title">{{ place().name }}</h2>
+
+    <div class="place-card__info">
+      <div class="place-card__meta">
+        <p class="place-card__category">
+          {{ categoryNames[place().category] }}
+        </p>
+        <p class="place-card__location">
+          {{ place().city }}, {{ place().country }}
+        </p>
+      </div>
+
+      @if (place().rating !== null ||
+      place().priceLevel !== null) {
+        <div class="place-card__stats">
+          @if (place().rating !== null) {
+            <div class="place-card__rating">
+              <img
+                src="images/icons/rating-star.svg"
+                alt=""
+                width="15"
+                height="15"
+              >
+              <span>{{ place().rating?.toFixed(1) }}</span>
+            </div>
+          }
+
+          @if (place().priceLevel !== null) {
+            <span class="place-card__price">
+              {{ getPrice(place().priceLevel!) }}
+            </span>
+          }
+        </div>
+      }
+
+      @if (place().tags.length) {
+        <ul class="place-card__tags">
+          @for (tag of place().tags; track tag) {
+            <li class="place-card__tag">{{ tag }}</li>
+          }
+        </ul>
+      }
+
+      <p class="place-card__description">
+        {{ place().description }}
+      </p>
+    </div>
+
+    <button
+      class="place-card__button"
+      type="button"
+      (click)="toggle()"
+    >
+      @if (place().isOpened) {
+        Скрыть
+      } @else {
+        Подробнее
+      }
+    </button>
+  </div>
+</article>
