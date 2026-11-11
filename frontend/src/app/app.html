@@ -25,7 +25,7 @@
 
   <section class="places">
     <div class="container places__list">
-      @for (place of places; track place.id) {
+      @for (place of filteredPlaces(); track place.id) {
         <app-place-card
           [place]="place"
           [priority]="$index < 4"

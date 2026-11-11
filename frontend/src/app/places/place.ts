@@ -13,4 +13,5 @@ export type Place = {
   description: string;
   imageUrl: string;
   isOpened?: boolean;
+  isFavorite?: boolean;
 };
