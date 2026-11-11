@@ -18,7 +18,7 @@
     <div class="place-card__info">
       <div class="place-card__meta">
         <p class="place-card__category">
-          {{ categoryNames[place().category] }}
+          {{ place().category | placeCategory }}
         </p>
         <p class="place-card__location">
           {{ place().city }}, {{ place().country }}
@@ -36,13 +36,13 @@
                 width="15"
                 height="15"
               >
-              <span>{{ place().rating?.toFixed(1) }}</span>
+              <span>{{ place().rating | placeRating }}</span>
             </div>
           }
 
           @if (place().priceLevel !== null) {
             <span class="place-card__price">
-              {{ getPrice(place().priceLevel!) }}
+              {{ place().priceLevel | placePrice }}
             </span>
           }
         </div>
