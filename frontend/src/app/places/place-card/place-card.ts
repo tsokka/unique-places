@@ -20,8 +20,13 @@ export class PlaceCard {
   place = input.required<Place>();
   priority = input(false);
   toggled = output<Place>({alias: 'toggle'});
+  favoriteToggled = output<Place>();
 
   toggle() {
     this.toggled.emit(this.place());
+  }
+
+  toggleFavorite() {
+    this.favoriteToggled.emit(this.place());
   }
 }

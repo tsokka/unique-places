@@ -12,13 +12,51 @@
   &__logo {
     display: block;
   }
+
+  &__favorites {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+  }
+
+  &__favorites-icon {
+    display: block;
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-gray);
+    mask: url("/images/icons/favorites.svg") center / 28px 24.144px no-repeat;
+    transition: background-color 0.2s;
+  }
+
+  &__favorites-count {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-gray);
+    color: var(--color-white);
+    font-size: 10px;
+    font-weight: 300;
+    line-height: 1.2;
+    transition: background-color 0.2s;
+  }
+
+  &__favorites:hover &__favorites-icon,
+  &__favorites:hover &__favorites-count {
+    background-color: var(--color-light-brown);
+  }
 }
 
 .hero {
   height: 450px;
   padding-top: 60px;
-  background: linear-gradient(90deg, var(--color-page) 44%, transparent 80%),
-  url("/images/hero.webp") center / cover no-repeat;
+  background: linear-gradient(90deg, var(--color-page) 44%, transparent 80%), url("/images/hero.webp") center / cover no-repeat;
 
   &__title {
     max-width: 630px;
@@ -89,8 +127,7 @@
     font-weight: 400;
     line-height: 1.2;
     white-space: nowrap;
-    transition: color 0.2s, border-color 0.2s,
-    background-color 0.2s;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
 
     &:hover {
       border-color: var(--color-tab-active);

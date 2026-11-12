@@ -35,6 +35,25 @@
     height: 212px;
   }
 
+  &__favorite {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-brown) 30%, transparent);
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--color-brown);
+    }
+  }
+
   &__image {
     object-fit: cover;
   }

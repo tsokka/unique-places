@@ -19,23 +19,31 @@
         fill
       >
     }
+    <button
+      class="place-card__favorite"
+      type="button"
+      [attr.aria-label]="place().isFavorite ? 'Убрать из избранного': 'Добавить в избранное'"
+      [attr.aria-pressed]="!!place().isFavorite"
+      (click)="toggleFavorite()"
+    >
+      <img
+        [src]="place().isFavorite ? 'images/icons/heart-filled.svg' : 'images/icons/heart.svg'"
+        alt=""
+        width="18"
+        height="18"
+      >
+    </button>
   </div>
 
   <div class="place-card__body">
     <h2 class="place-card__title">{{ place().name }}</h2>
-
     <div class="place-card__info">
       <div class="place-card__meta">
-        <p class="place-card__category">
-          {{ place().category | placeCategory }}
-        </p>
-        <p class="place-card__location">
-          {{ place().city }}, {{ place().country }}
-        </p>
+        <p class="place-card__category">{{ place().category | placeCategory }}</p>
+        <p class="place-card__location">{{ place().city }}, {{ place().country }}</p>
       </div>
 
-      @if (place().rating !== null ||
-      place().priceLevel !== null) {
+      @if (place().rating !== null || place().priceLevel !== null) {
         <div class="place-card__stats">
           @if (place().rating !== null) {
             <div class="place-card__rating">

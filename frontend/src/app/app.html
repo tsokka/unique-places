@@ -3,15 +3,20 @@
     <a class="header__logo" href="/">
       <img src="images/logo.svg" alt="unique.places" width="191" height="36">
     </a>
+
+    <div class="header__favorites" role="status" [attr.aria-label]="'Избранных мест: ' + favoritesCount()">
+      <span class="header__favorites-icon" aria-hidden="true"></span>
+      @if (favoritesCount() > 0) {
+        <span class="header__favorites-count" aria-hidden="true">{{ favoritesCount() }}</span>
+      }
+    </div>
   </div>
 </header>
 
 <main>
   <section class="hero">
     <div class="container">
-      <h1 class="hero__title">
-        Места, которые стоит увидеть хотя бы раз в жизни
-      </h1>
+      <h1 class="hero__title">Места, которые стоит увидеть хотя бы раз в жизни</h1>
       <div class="hero__divider">
         <img src="images/icons/star.svg" alt="" width="24" height="24">
       </div>
@@ -53,6 +58,7 @@
             [place]="place"
             [priority]="$index < 4"
             (toggle)="togglePlace($event)"
+            (favoriteToggled)="toggleFavorite($event)"
           />
         } @empty {
           <div class="places__empty">
@@ -63,18 +69,13 @@
               width="544"
               height="440"
             >
-            <h2 class="places__empty-title">
-              Ничего не найдено
-            </h2>
-            <p class="places__empty-description">
-              В этой категории пока нет уникальных мест
-            </p>
+            <h2 class="places__empty-title">Ничего не найдено</h2>
+            <p class="places__empty-description">В этой категории пока нет уникальных мест</p>
           </div>
         }
       </div>
     </div>
   </section>
-
 </main>
 
 <footer class="footer">
@@ -85,14 +86,10 @@
     </div>
     <ul class="footer__links">
       <li>
-        <a class="footer__link" href="https://pinterest.com" target="_blank">
-          Pinterest
-        </a>
+        <a class="footer__link" href="https://pinterest.com" target="_blank">Pinterest</a>
       </li>
       <li>
-        <a class="footer__link" href="https://telegram.org" target="_blank">
-          Telegram
-        </a>
+        <a class="footer__link" href="https://telegram.org" target="_blank">Telegram</a>
       </li>
     </ul>
   </div>
