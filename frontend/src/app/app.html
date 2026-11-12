@@ -24,16 +24,57 @@
   </section>
 
   <section class="places">
-    <div class="container places__list">
-      @for (place of filteredPlaces(); track place.id) {
-        <app-place-card
-          [place]="place"
-          [priority]="$index < 4"
-          (toggle)="togglePlace($event)"
-        />
-      }
+    <div class="container">
+      <div class="places__tabs" role="group" aria-label="Категории мест">
+        <button
+          class="places__tab"
+          type="button"
+          [class.places__tab_active]="selectedCategory() === null"
+          [attr.aria-pressed]="selectedCategory() === null"
+          (click)="selectCategory(null)"
+        >
+          Все
+        </button>
+        @for (category of categories; track category) {
+          <button
+            class="places__tab"
+            type="button"
+            [class.places__tab_active]="selectedCategory() === category"
+            [attr.aria-pressed]="selectedCategory() === category"
+            (click)="selectCategory(category)"
+          >
+            {{ category | placeCategory: true }}
+          </button>
+        }
+      </div>
+      <div class="places__list">
+        @for (place of filteredPlaces(); track place.id) {
+          <app-place-card
+            [place]="place"
+            [priority]="$index < 4"
+            (toggle)="togglePlace($event)"
+          />
+        } @empty {
+          <div class="places__empty">
+            <img
+              class="places__empty-image"
+              src="images/empty-state.webp"
+              alt=""
+              width="544"
+              height="440"
+            >
+            <h2 class="places__empty-title">
+              Ничего не найдено
+            </h2>
+            <p class="places__empty-description">
+              В этой категории пока нет уникальных мест
+            </p>
+          </div>
+        }
+      </div>
     </div>
   </section>
+
 </main>
 
 <footer class="footer">

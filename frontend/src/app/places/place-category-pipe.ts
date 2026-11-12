@@ -5,12 +5,13 @@ import {PlaceCategory} from './place';
   name: 'placeCategory',
 })
 export class PlaceCategoryPipe implements PipeTransform {
-  transform(category: PlaceCategory): string {
+
+  transform(category: PlaceCategory, forTab = false): string {
     switch (category) {
       case 'hotel':
-        return 'Отель';
+        return forTab ? 'Отели' : 'Отель';
       case 'restaurant':
-        return 'Ресторан';
+        return forTab ? 'Рестораны' : 'Ресторан';
       case 'entertainment':
         return 'Развлечения';
       case 'nature':

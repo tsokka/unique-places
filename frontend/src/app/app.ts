@@ -2,9 +2,10 @@ import {Component, computed, signal} from '@angular/core';
 import {Place, PlaceCategory} from './places/place';
 import {PlaceCard} from './places/place-card/place-card';
 import {PLACES} from './places/mock-places';
+import {PlaceCategoryPipe} from './places/place-category-pipe';
 
 @Component({
-  imports: [PlaceCard],
+  imports: [PlaceCard, PlaceCategoryPipe],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
@@ -31,6 +32,20 @@ export class App {
     ).length
   );
 
+  categories: PlaceCategory[] = [
+    'hotel',
+    'restaurant',
+    'entertainment',
+    'nature',
+    'culture',
+    'architecture',
+    'spa',
+  ];
+
+  selectCategory(category: PlaceCategory | null) {
+    this.selectedCategory.set(category);
+  }
+
   togglePlace(place: Place) {
     this.places.update((places) =>
       places.map((item) =>
@@ -40,5 +55,4 @@ export class App {
       )
     );
   }
-
 }

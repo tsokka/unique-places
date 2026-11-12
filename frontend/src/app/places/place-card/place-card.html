@@ -3,13 +3,22 @@
   [class.place-card_opened]="place().isOpened"
 >
   <div class="place-card__picture">
-    <img
-      class="place-card__image"
-      [ngSrc]="place().imageUrl"
-      [alt]="place().name"
-      fill
-      [priority]="priority()"
-    >
+    @if (priority()) {
+      <img
+        class="place-card__image"
+        [ngSrc]="place().imageUrl"
+        [alt]="place().name"
+        fill
+        priority
+      >
+    } @else {
+      <img
+        class="place-card__image"
+        [ngSrc]="place().imageUrl"
+        [alt]="place().name"
+        fill
+      >
+    }
   </div>
 
   <div class="place-card__body">
