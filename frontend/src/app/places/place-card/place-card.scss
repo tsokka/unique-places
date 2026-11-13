@@ -18,6 +18,23 @@
     height: 212px;
   }
 
+  &__badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 7.5px 15px;
+    border-radius: 1000px;
+    background-color: var(--color-tab-active);
+    color: var(--color-dark-gray);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
   &__favorite {
     position: absolute;
     top: 16px;

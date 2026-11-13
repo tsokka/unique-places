@@ -4,6 +4,7 @@ import {Place} from '../place';
 import {PlacePricePipe} from '../place-price-pipe';
 import {PlaceRatingPipe} from '../place-rating-pipe';
 import {PlaceCategoryPipe} from '../place-category-pipe';
+import {TooltipDirective} from '../../shared/ui/tooltip';
 
 @Component({
   imports: [
@@ -11,6 +12,7 @@ import {PlaceCategoryPipe} from '../place-category-pipe';
     PlacePricePipe,
     PlaceRatingPipe,
     PlaceCategoryPipe,
+    TooltipDirective,
   ],
   selector: 'app-place-card',
   styleUrl: './place-card.scss',

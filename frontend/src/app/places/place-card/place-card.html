@@ -16,11 +16,15 @@
         fill
       >
     }
+    @if (place().badge) {
+      <span class="place-card__badge">{{ place().badge }}</span>
+    }
     <button
       class="place-card__favorite"
       type="button"
-      [attr.aria-label]="place().isFavorite ? 'Убрать из избранного': 'Добавить в избранное'"
+      [attr.aria-label]="place().isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'"
       [attr.aria-pressed]="!!place().isFavorite"
+      [appTooltip]="place().isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'"
       (click)="toggleFavorite()"
     >
       <img

@@ -10,6 +10,7 @@ export type Place = {
   rating: number | null;
   priceLevel: number | null;
   tags: string[];
+  badge?: string;
   description: string;
   imageUrl: string;
   isFavorite?: boolean;

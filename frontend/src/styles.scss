@@ -71,3 +71,28 @@ button {
 body:has(app-place-details) {
   overflow: hidden;
 }
+
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  width: 172px;
+  height: 32px;
+  padding: 7.5px 10px;
+  border-radius: 4px;
+  background-color: var(--color-gray);
+  color: var(--color-white);
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    right: 7px;
+    border-right: 12px solid transparent;
+    border-bottom: 17px solid var(--color-gray);
+    border-left: 12px solid transparent;
+  }
+}

@@ -8,7 +8,12 @@
   </button>
 
   <div class="place-details__card">
-    <img class="place-details__image" [src]="place().imageUrl" [alt]="place().name" width="588" height="403">
+    <div class="place-details__picture">
+      <img class="place-details__image" [src]="place().imageUrl" [alt]="place().name" width="588" height="403">
+      @if (place().badge) {
+        <span class="place-details__badge">{{ place().badge }}</span>
+      }
+    </div>
 
     <div class="place-details__body">
       <h2 class="place-details__title" id="place-details-title">{{ place().name }}</h2>
