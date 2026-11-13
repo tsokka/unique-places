@@ -57,7 +57,7 @@
           <app-place-card
             [place]="place"
             [priority]="$index < 4"
-            (toggle)="togglePlace($event)"
+            (toggle)="openPlace($event)"
             (favoriteToggled)="toggleFavorite($event)"
           />
         } @empty {
@@ -76,6 +76,10 @@
       </div>
     </div>
   </section>
+
+  @if (selectedPlace(); as place) {
+    <app-place-details [place]="place" (close)="closePlace()"/>
+  }
 </main>
 
 <footer class="footer">

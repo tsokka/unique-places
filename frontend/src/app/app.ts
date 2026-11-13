@@ -3,9 +3,10 @@ import {Place, PlaceCategory} from './places/place';
 import {PlaceCard} from './places/place-card/place-card';
 import {PLACES} from './places/mock-places';
 import {PlaceCategoryPipe} from './places/place-category-pipe';
+import {PlaceDetails} from './places/place-details/place-details';
 
 @Component({
-  imports: [PlaceCard, PlaceCategoryPipe],
+  imports: [PlaceCard, PlaceCategoryPipe, PlaceDetails],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
@@ -17,6 +18,8 @@ export class App {
   places = signal<Place[]>(PLACES);
 
   selectedCategory = signal<PlaceCategory | null>(null);
+
+  selectedPlace = signal<Place | null>(null);
 
   filteredPlaces = computed(() => {
     const category = this.selectedCategory();
@@ -67,14 +70,12 @@ export class App {
     this.selectedCategory.set(category);
   }
 
-  togglePlace(place: Place) {
-    this.places.update((places) =>
-      places.map((item) =>
-        item.id === place.id
-          ? {...item, isOpened: !item.isOpened}
-          : item
-      )
-    );
+  openPlace(place: Place) {
+    this.selectedPlace.set(place);
+  }
+
+  closePlace() {
+    this.selectedPlace.set(null);
   }
 
   toggleFavorite(place: Place) {

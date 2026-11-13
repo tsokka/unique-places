@@ -1,7 +1,4 @@
-<article
-  class="place-card"
-  [class.place-card_opened]="place().isOpened"
->
+<article class="place-card">
   <div class="place-card__picture">
     @if (priority()) {
       <img
@@ -78,16 +75,6 @@
       </p>
     </div>
 
-    <button
-      class="place-card__button"
-      type="button"
-      (click)="toggle()"
-    >
-      @if (place().isOpened) {
-        Скрыть
-      } @else {
-        Подробнее
-      }
-    </button>
+    <button class="place-card__button" type="button" (click)="toggle()">Подробнее</button>
   </div>
 </article>

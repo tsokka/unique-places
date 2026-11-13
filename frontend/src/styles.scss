@@ -67,3 +67,7 @@ button {
 .container {
   padding-inline: 120px;
 }
+
+body:has(app-place-details) {
+  overflow: hidden;
+}

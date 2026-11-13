@@ -1,0 +1,46 @@
+<button class="place-details__backdrop" type="button" aria-label="Закрыть окно" (click)="close()"></button>
+
+<section class="place-details" role="dialog" aria-modal="true" aria-labelledby="place-details-title">
+  <button class="place-details__close" type="button" aria-label="Закрыть" (click)="close()">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M8 8L24 24M24 8L8 24" stroke="currentColor" stroke-width="2"/>
+    </svg>
+  </button>
+
+  <div class="place-details__card">
+    <img class="place-details__image" [src]="place().imageUrl" [alt]="place().name" width="588" height="403">
+
+    <div class="place-details__body">
+      <h2 class="place-details__title" id="place-details-title">{{ place().name }}</h2>
+
+      <div class="place-details__meta">
+        <p class="place-details__category">{{ place().category | placeCategory }}</p>
+        <p class="place-details__location">{{ place().city }}, {{ place().country }}</p>
+      </div>
+
+      @if (place().rating !== null || place().priceLevel !== null) {
+        <div class="place-details__stats">
+          @if (place().rating !== null) {
+            <div class="place-details__rating">
+              <img src="images/icons/rating-star.svg" alt="" width="15" height="15">
+              <span>{{ place().rating | placeRating }}</span>
+            </div>
+          }
+          @if (place().priceLevel !== null) {
+            <span class="place-details__price">{{ place().priceLevel | placePrice }}</span>
+          }
+        </div>
+      }
+
+      @if (place().tags.length) {
+        <ul class="place-details__tags">
+          @for (tag of place().tags; track tag) {
+            <li class="place-details__tag">{{ tag }}</li>
+          }
+        </ul>
+      }
+
+      <p class="place-details__description">{{ place().description }}</p>
+    </div>
+  </div>
+</section>
