@@ -78,7 +78,7 @@
   </section>
 
   @if (selectedPlace(); as place) {
-    <app-place-details [place]="place" (close)="closePlace()"/>
+    <app-place-details [place]="place" (close)="closePlace()" (favoriteToggled)="toggleFavorite($event)"/>
   }
 </main>
 

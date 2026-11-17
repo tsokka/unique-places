@@ -1,4 +1,4 @@
-import {Directive, ElementRef, inject, input, OnDestroy, Renderer2} from '@angular/core';
+import {Directive, ElementRef, inject, input, InputSignal, OnDestroy, Renderer2} from '@angular/core';
 
 @Directive({
   selector: '[appTooltip]',
@@ -9,13 +9,13 @@ import {Directive, ElementRef, inject, input, OnDestroy, Renderer2} from '@angul
   },
 })
 export class TooltipDirective implements OnDestroy {
-  private element = inject(ElementRef<HTMLElement>);
-  private renderer = inject(Renderer2);
+  private element: ElementRef<HTMLElement> = inject(ElementRef<HTMLElement>);
+  private renderer: Renderer2 = inject(Renderer2);
   private tooltip: HTMLElement | null = null;
 
-  tooltipText = input('', {alias: 'appTooltip'});
+  tooltipText: InputSignal<string> = input('', {alias: 'appTooltip'});
 
-  show() {
+  show(): void {
     if (!this.tooltipText()) return;
 
     this.tooltip = this.renderer.createElement('span');
@@ -28,14 +28,14 @@ export class TooltipDirective implements OnDestroy {
     this.renderer.setStyle(this.tooltip, 'left', `${rect.left + rect.width / 2 - 153}px`);
   }
 
-  hide() {
+  hide(): void {
     if (this.tooltip) {
       this.renderer.removeChild(document.body, this.tooltip);
       this.tooltip = null;
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.hide();
   }
 }

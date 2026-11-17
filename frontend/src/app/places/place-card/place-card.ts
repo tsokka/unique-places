@@ -1,9 +1,9 @@
 import {NgOptimizedImage} from '@angular/common';
-import {Component, input, output} from '@angular/core';
+import {Component, input, InputSignal, output, OutputEmitterRef} from '@angular/core';
 import {Place} from '../place';
-import {PlacePricePipe} from '../place-price-pipe';
-import {PlaceRatingPipe} from '../place-rating-pipe';
-import {PlaceCategoryPipe} from '../place-category-pipe';
+import {PlacePricePipe} from '../pipes/place-price-pipe';
+import {PlaceRatingPipe} from '../pipes/place-rating-pipe';
+import {PlaceCategoryPipe} from '../pipes/place-category-pipe';
 import {TooltipDirective} from '../../shared/ui/tooltip';
 
 @Component({
@@ -19,16 +19,16 @@ import {TooltipDirective} from '../../shared/ui/tooltip';
   templateUrl: './place-card.html',
 })
 export class PlaceCard {
-  place = input.required<Place>();
-  priority = input(false);
-  toggled = output<Place>({alias: 'toggle'});
-  favoriteToggled = output<Place>();
+  place: InputSignal<Place> = input.required<Place>();
+  priority: InputSignal<boolean> = input(false);
+  toggled: OutputEmitterRef<Place> = output<Place>({alias: 'toggle'});
+  favoriteToggled: OutputEmitterRef<Place> = output<Place>();
 
-  toggle() {
+  toggle(): void {
     this.toggled.emit(this.place());
   }
 
-  toggleFavorite() {
+  toggleFavorite(): void {
     this.favoriteToggled.emit(this.place());
   }
 }

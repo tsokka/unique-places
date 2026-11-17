@@ -1,3 +1,13 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
 .header {
   height: 80px;
   border-bottom: 1px solid var(--color-header-border);
@@ -144,7 +154,7 @@
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
     gap: 25px 24px;
   }
@@ -183,6 +193,7 @@
 
 .footer {
   background-color: var(--color-light-beige);
+  flex: 0 0 auto;
 
   &__container {
     display: flex;

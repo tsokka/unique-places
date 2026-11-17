@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {PlaceCategory} from './place';
+import {PlaceCategory} from '../place';
 
 @Pipe({
   name: 'placeCategory',

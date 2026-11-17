@@ -1,8 +1,8 @@
-import {Component, computed, effect, signal} from '@angular/core';
+import {Component, computed, effect, signal, Signal, WritableSignal} from '@angular/core';
 import {Place, PlaceCategory} from './places/place';
 import {PlaceCard} from './places/place-card/place-card';
 import {PLACES} from './places/mock-places';
-import {PlaceCategoryPipe} from './places/place-category-pipe';
+import {PlaceCategoryPipe} from './places/pipes/place-category-pipe';
 import {PlaceDetails} from './places/place-details/place-details';
 
 @Component({
@@ -13,15 +13,15 @@ import {PlaceDetails} from './places/place-details/place-details';
 })
 
 export class App {
-  private readonly favoriteStorageKey = 'unique-places-favorites';
+  private readonly favoriteStorageKey: string = 'unique-places-favorites';
 
-  places = signal<Place[]>(PLACES);
+  places: WritableSignal<Place[]> = signal<Place[]>(PLACES);
+  selectedCategory: WritableSignal<PlaceCategory | null> = signal<PlaceCategory | null>(null);
+  selectedPlaceId: WritableSignal<number | null> = signal<number | null>(null);
+  selectedPlace: Signal<Place | null> = computed(() => this.places().find(place =>
+    place.id === this.selectedPlaceId()) ?? null);
 
-  selectedCategory = signal<PlaceCategory | null>(null);
-
-  selectedPlace = signal<Place | null>(null);
-
-  filteredPlaces = computed(() => {
+  filteredPlaces: Signal<Place[]> = computed(() => {
     const category = this.selectedCategory();
 
     return category === null
@@ -29,7 +29,7 @@ export class App {
       : this.places().filter(place => place.category === category);
   });
 
-  favoritesCount = computed(() =>
+  favoritesCount: Signal<number> = computed(() =>
     this.places().filter(place => place.isFavorite).length
   );
 
@@ -66,19 +66,19 @@ export class App {
     'spa',
   ];
 
-  selectCategory(category: PlaceCategory | null) {
+  selectCategory(category: PlaceCategory | null): void {
     this.selectedCategory.set(category);
   }
 
-  openPlace(place: Place) {
-    this.selectedPlace.set(place);
+  openPlace(place: Place): void {
+    this.selectedPlaceId.set(place.id);
   }
 
-  closePlace() {
-    this.selectedPlace.set(null);
+  closePlace(): void {
+    this.selectedPlaceId.set(null);
   }
 
-  toggleFavorite(place: Place) {
+  toggleFavorite(place: Place): void {
     this.places.update((places) =>
       places.map((item) =>
         item.id === place.id
